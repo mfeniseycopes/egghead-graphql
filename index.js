@@ -2,11 +2,16 @@ const { graphql, buildSchema } = require('graphql')
 
 // describes our schema
 const schema = buildSchema(`
-type Query {
+type Video {
   id: ID,
   title: String,
   duration: Int,
   watched: Boolean
+}
+
+type Query {
+  video: Video
+  videos: [Video]
 }
 
 type Schema {
@@ -14,19 +19,40 @@ type Schema {
 }
 `)
 
+const videoA = {
+  id: 'a',
+  title: 'Create a GraphQL Schema',
+  duration: 120,
+  watched: true,
+}
+
+const videoB = {
+  id: 'b',
+  title: 'Does other things',
+  duration: 240,
+  watched: true,
+}
+
+const videos = [videoA, videoB]
+
 const resolvers = {
-  id: () => '1',
-  title: () => 'bar',
-  duration: () => 180,
-  watched: () => true,
+  video: () => ({
+    id: '1',
+    title: 'bar',
+    duration: 180,
+    watched: true,
+  }),
+  videos: () => videos,
 }
 
 const query = `
 query myFirstQuery {
-  id
-  title
-  duration
-  watched
+  videos {
+    id,
+    title,
+    duration,
+    watched
+  }
 }
 `
 
